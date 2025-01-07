@@ -1,0 +1,233 @@
+@charset "UTF-8";
+ /* 전체 메뉴 컨테이너 */
+.main-menu {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/*header */
+#header{
+    width: 80%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+/* 메인 메뉴 리스트 */
+.main-menu > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* 메인 메뉴 항목 */
+.main-menu > ul > li {
+    position: relative;
+    padding: 15px 30px;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.main-menu a {
+    text-decoration: none;
+    color: #333;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+/* 서브메뉴 컨테이너 */
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: none;
+    flex-direction: column; /* 세로 레이아웃으로 변경 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* 서브메뉴 리스트 */
+.submenu > ul {
+    display: flex;
+    flex-direction: column; /* 세로 레이아웃으로 변경 */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+    list-style: none;
+}
+
+.submenu > ul > li {
+    text-align: center; /* 텍스트 정렬 변경 */
+    padding: 10px 20px; /* 패딩 조정 */
+    font-size: 20px;
+}
+
+.submenu a {
+    display: block;
+    color: #333;
+    transition: color 0.3s ease;
+    font-size: 14px;
+}
+
+.submenu a:hover {
+    color: #e30613;
+}
+
+/* 호버 시 모든 서브메뉴 표시 */
+.main-menu > ul > li:hover > .submenu {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+}
+
+/* 슬라이드 다운 애니메이션 */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#content video {
+    max-width: 100%; /* 화면 폭에 맞게 조정 */
+    height: auto; /* 비율 유지 */
+    display: block; /* 블록 요소로 처리 */
+}
+#CGV_header{
+    height: 130px;
+    width: 80%;
+    margin: auto;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+#CGV_header .contents {
+    display: flex; /* Flexbox 활성화 */
+    justify-content: space-between; /* 좌우 끝으로 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+#CGV_header .contents a {
+    margin-left: 15px; /* 링크 간격 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+    color: #333; /* 기본 텍스트 색상 */
+    font-size: 14px; /* 폰트 크기 설정 */
+    font-weight: bold;
+}
+
+.btn_movieSelection_detailView {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    width: 120px;
+    height: 30px;
+    border-radius: 30px;
+    display: block;
+    font-size: 14px;
+    color: #343434;
+    line-height: 1.429em;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+
+}
+a {
+    text-decoration: none;
+}
+
+
+
+.ticket-box {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+.ticket-header {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+.ticket-info {
+    display: flex;
+    justify-content: space-between;
+}
+.movie-image {
+    width: 80px;
+    height: 120px;
+    margin-right: 10px;
+}
+.details {
+    flex: 1;
+}
+.details div {
+    margin-bottom: 5px;
+}
+.cancel-button {
+    display: block;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden; /* 버튼 요소가 둥근 모서리에 맞게 잘리도록 설정 */
+}
+
+.cancel-button button {
+    background-color: #fb4357; /* 원래 배경색 */
+    color: white; /* 텍스트 색상 */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold; /* 텍스트를 강조 */
+    cursor: pointer;
+    border-radius: 10px; /* 버튼 자체도 둥근 모서리 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 버튼에 그림자 추가 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.cancel-button button:hover {
+    background-color: #f2f2f2; /* 호버 시 배경색 변경 */
+    color: #fb4357; /* 텍스트 색상 변경 */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3); /* 그림자 강조 */
+    transform: scale(1.05); /* 약간 확대 효과 */
+}
+
+.home{
+    font-size: 25px;
+    padding: 10px;
+
+}
+.home:hover{
+    background-color: #fb4357;
+    transition: background-color 0.3s ease, color 0.3s ease; /* 부드러운 전환 효과 */
+
+}
+.home a:hover{
+    color: #ffffff; /* 글자를 하얗게 */
+}
+
+
+.sub{
+    font-size: 15px;
+    padding: 10px;
+}
+
+.sub:hover{
+    background-color: #f8f8f8;
+}

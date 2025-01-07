@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<properties resource="properties/database.properties" />
+<!--   <settings>
+  	<setting name="jdbcTypeForNull" value="NULL" />
+  </settings> -->
+<typeAliases>
+	<!-- 관리자 대시보드 관리 VO, Domain -->
+	<typeAlias type="kr.co.sist.kjy_prj.admin.dashboard.DashMovieDomain" alias="dashMovieDomain"/>
+
+	<!-- 관리자 로그인 관리 VO, Domain -->
+	<typeAlias type="kr.co.sist.kjy_prj.admin.login.LoginDomain" alias="loginDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.login.LoginVO" alias="loginVO"/>
+	
+	<!-- 관리자 영화 관리 VO, Domain -->
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.MovieDomain" alias="movieDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.CastDomain" alias="castDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.CountryDomain" alias="countryDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.GenreDomain" alias="genreDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.StillCutDomain" alias="stillcutDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.SupervisionDomain" alias="supervisionDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.ScreeningInfoDomain" alias="screeningInfoDomain"/>
+	
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.MovieVO" alias="movieVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.CastVO" alias="castVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.CountryVO" alias="countryVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.GenreVO" alias="genreVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.StillCutVO" alias="stillcutVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.SupervisionVO" alias="supervisionVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.ScreeningInfoVO" alias="screeningInfoVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.movie.SearchVO" alias="searchVO"/>
+	
+	<!-- 사용자 -->
+	
+	
+	<!-- 관리자 회원관리 VO, Domain -->
+	<typeAlias type="kr.co.sist.kjy_prj.admin.member.AdminMemberDomain" alias="adminMemberDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.member.AdminMemberVO" alias="adminMemberVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.member.AdminMemberSearchVO" alias="adminMemberSearchVO"/>
+	
+	<!-- 관리자 예매관리 VO, Domain -->
+	<typeAlias type="kr.co.sist.kjy_prj.admin.reservation.AdminReservationDomain" alias="adminReservationDomain"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.reservation.AdminReservationVO" alias="adminReservationVO"/>
+	<typeAlias type="kr.co.sist.kjy_prj.admin.reservation.AdminReservationSearchVO" alias="adminReservationSearchVO"/>
+
+</typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${connectionURL}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="kr/co/sist/kjy_prj/admin/dashboard/dashboardMapper.xml"/>
+    <mapper resource="kr/co/sist/kjy_prj/admin/login/loginMapper.xml"/>
+	<mapper resource="kr/co/sist/kjy_prj/admin/member/adminMemberMapper.xml"/>
+    <mapper resource="kr/co/sist/kjy_prj/admin/movie/movieMapper.xml"/>
+    <mapper resource="kr/co/sist/kjy_prj/admin/reservation/adminReservationMapper.xml"/>
+    <mapper resource="mapper/member/MemberFind.xml"/>
+    <mapper resource="mapper/member/MyMovieMapper.xml"/>
+    <mapper resource="mapper/member/MyPageMapper.xml"/>
+  </mappers>
+</configuration>

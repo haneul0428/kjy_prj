@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.kjy_prj.admin.adminReservation">
+  <!-- 총 예매 수 얻기 -->
+  <select id="totalCnt" resultType="int" parameterType="adminReservationSearchVO">
+  select	count(r.re_num) cnt
+  from		reservation r join member mem on r.member_id=mem.member_id
+  							join screening_info si on r.sc_num=si.sc_num
+  							join theater t on si.th_num=t.th_num
+  							join movie mov on si.movie_num = mov.movie_num
+  <where>
+    <if test="keyword != null and keyword != ''">
+      <choose>
+        <when test="field == 0">
+        instr(mov.title_k, #{keyword}) != 0
+        </when>
+        <when test="field == 1">
+        instr(r.member_id, #{keyword}) != 0
+        </when>
+        <when test="field == 2">
+        instr(t.th_name, #{keyword}) != 0
+        </when>
+      </choose>
+    </if>
+  </where>
+  </select>
+  
+  <!-- 예매 리스트 -->
+  <select id="selectReservationList" resultType="adminReservationDomain" parameterType="adminReservationSearchVO">
+  select	sub.re_num, sub.title_k, sub.member_id, sub.phone, sub.th_name,
+			sub.sc_date, sub.sc_time, sub.view_date, sub.re_date, sub.cancel_f
+  from		(select		r.re_num, mov.title_k, r.member_id, mem.phone, t.th_name,
+						si.sc_date, si.sc_time, r.view_date, r.re_date, r.cancel_f,
+						row_number() over (order by r.re_num desc) rnum
+			from		reservation r join screening_info si on r.sc_num = si.sc_num
+										join theater t on si.th_num = t.th_num
+										join member mem on r.member_id = mem.member_id
+										join movie mov on si.movie_num = mov.movie_num
+  			<where>
+  			  <if test="keyword != null and keyword != ''">
+  			    <choose>
+	              <when test="field == 0">
+	              instr(mov.title_k, #{keyword}) != 0
+	              </when>
+	              <when test="field == 1">
+	              instr(r.member_id, #{keyword}) != 0
+	              </when>
+	              <when test="field == 2">
+	              instr(t.th_name, #{keyword}) != 0
+	              </when>
+  			    </choose>
+  			  </if>
+  			</where>
+  ) sub 
+  where	sub.rnum between #{startNum} and #{endNum}
+  </select>
+  
+  <!-- 예매 상세보기 -->
+  <select id="selectReservationDetail" resultType="adminReservationDomain" parameterType="adminReservationVO">
+  select	r.re_num, mov.title_k, mem.member_id, mem.phone, t.th_name,
+  			si.sc_date, si.sc_time, r.re_date, r.cancel_f, r.people, 
+  			LISTAGG(ds.h_num, ',') WITHIN GROUP (ORDER BY ds.h_num) as h_num,
+  			LISTAGG(ds.w_num, ',') WITHIN GROUP (ORDER BY ds.w_num) as w_num
+  from		reservation r join screening_info si on r.sc_num=si.sc_num
+  							join theater t ON si.th_num = t.th_num
+  							join member mem ON r.member_id = mem.member_id
+  							join movie mov ON si.movie_num = mov.movie_num
+  							join re_seat rs ON r.re_num = rs.re_num
+  							join detail_seat ds ON rs.detail_s_num = ds.detail_s_num
+  where		r.member_id=#{member_id} and r.re_num=#{re_num}
+  group by	r.re_num, mov.title_k, mem.member_id, mem.phone, t.th_name, si.sc_date, si.sc_time, r.re_date, r.cancel_f, r.people
+  </select>
+  
+  <!-- 예매 상태 -->
+  <update id="deleteReservation" parameterType="adminReservationVO">
+  update reservation
+    set 
+    	cancel_f = case
+      				when cancel_f='Y' then 'N'
+      				when cancel_f='N' then 'Y'
+      				end
+  where	member_id=#{member_id} and re_num=#{re_num}
+  </update>
+  
+</mapper>

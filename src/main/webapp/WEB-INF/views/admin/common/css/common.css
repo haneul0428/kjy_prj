@@ -1,0 +1,25 @@
+@charset "UTF-8";
+#header{
+	height: 10%;
+	width: 99%;
+	background-color: blue;
+}
+/* #sideMenuContainer{
+	height: 90%;
+	width: 10%;
+	width: 233px;
+	position: absolute;
+	top: 50px;
+} */
+.nav-link a:link {
+	color: #8C3434;	
+}
+#container{
+	height: 90%;
+	width: 89%;
+	position: absolute;
+	top: 50px;
+	left: 10%;
+	margin: 1px;
+	padding: 10px 20px;
+}

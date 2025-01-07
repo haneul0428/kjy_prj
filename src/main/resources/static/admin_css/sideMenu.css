@@ -1,0 +1,24 @@
+@charset "UTF-8";
+ul{
+	list-style-type: none;
+	padding: 0;
+	display: inline;
+}
+li{
+	display: flex;
+	height: 40px;
+	background-color: #8C3434FF;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #FFFFFF;
+	border-top: none;
+}
+li a{
+	color: #FFFFFF !important;
+}
+li:hover{
+	background-color: #d05252ff;
+}
+li.on{
+	background-color: #d05252ff;
+}

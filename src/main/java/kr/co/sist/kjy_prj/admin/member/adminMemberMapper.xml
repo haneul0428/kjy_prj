@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.kjy_prj.admin.adminMember">
+  <!-- 총 일반 회원 수 얻기 -->
+  <select id="totalNormalCnt" resultType="int" parameterType="adminMemberSearchVO">
+  select	count(*) cnt
+  from		member
+  <where>
+    <if test="keyword != null and keyword != ''">
+      <choose>
+        <when test="field == 0">
+        member_id like '%' || #{keyword} || '%'
+        </when>
+        <when test="field == 1">
+        name like '%' || #{keyword} || '%'
+        </when>
+        <when test="field == 2">
+        phone like '%' || #{keyword} || '%'
+        </when>
+      </choose>
+    </if>
+    and social_f='G'
+  </where>
+  </select>
+  
+  <!-- 총 소셜 회원 수 얻기 -->
+  <select id="totalSocialCnt" resultType="int" parameterType="adminMemberSearchVO">
+  select	count(*) cnt
+  from		member
+  <where>
+    <if test="keyword != null and keyword != ''">
+      <choose>
+        <when test="field == 0">
+        member_id like '%' || #{keyword} || '%'
+        </when>
+        <when test="field == 1">
+        name like '%' || #{keyword} || '%'
+        </when>
+        <when test="field == 2">
+        phone like '%' || #{keyword} || '%'
+        </when>
+      </choose>
+    </if>
+    and social_f='N'
+  </where>
+  </select>
+  
+  <!-- 
+  회원리스트
+  <select id="selectMemberList" resultType="adminMemberDomain" parameterType="adminMemberSearchVO">
+  select	member_id, name, nickname, phone, email, input_date, member_f
+  from		(select member_id, name, nickname, phone, email, input_date, member_f,
+					row_number() over(order by input_date desc) rnum
+			from	member
+			<where>
+			  <if test="keyword != null and keyword != ''">
+			    <choose>
+			      <when test="field == 0">
+				  member_id like '%' || #{keyword} || '%'
+				  </when>
+				  <when test="field == 1">
+				  name like '%' || #{keyword} || '%'
+				  </when>
+				  <when test="field == 2">
+				  phone like '%' || #{keyword} || '%'
+				  </when>
+			    </choose>
+			  </if>
+			</where>
+    )where	rnum between #{startNum} and #{endNum}
+  </select>
+   -->
+  <!-- 회원 리스트 -->
+  <select id="selectMemberList" resultType="adminMemberDomain">
+  select	member_id, name, nickname, phone, email, input_date, member_f, social_f
+  from		member
+  order by	input_date desc
+  </select>
+
+  <!-- 회원 상세보기 -->
+  <select id="selectMemberDetail" resultType="adminMemberDomain" parameterType="String">
+  select	profile, member_id, name, nickname, phone, email, birth, gender, input_date, member_f, social_f
+  from		member
+  where		member_id=#{member_id}
+  </select>
+  
+  <!-- 회원 정보 수정 -->
+  <update id="updateMember" parameterType="adminMemberVO">
+  update member
+    <set>
+      nickname=#{nickname},
+      <if test="phone != null and phone != ''">
+      phone=#{phone},
+      </if>
+      <if test="email != null and email != ''">
+      email=#{email}
+      </if>
+    </set>
+  where member_id=#{member_id, jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 회원 정보 삭제 ~활동 상태 변경 -->
+  <update id="deleteMember" parameterType="String">
+  update member
+    set
+      member_f = case
+      				when member_f='Y' then 'N'
+      				when member_f='N' then 'Y'
+      				end
+  where member_id=#{member_id}
+  </update>
+  
+</mapper>

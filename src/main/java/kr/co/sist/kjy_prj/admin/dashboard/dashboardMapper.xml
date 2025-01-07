@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kjy_prj.admin.dashboard">
+
+<select id="selectBookedTickets" resultType="int" parameterType="int">
+	select count(re_num) AS booked
+	from RESERVATION
+	where cancel_f='N' and TRUNC(re_date) = TRUNC(sysdate - #{ day })
+</select>
+
+<select id="selectCanceledTickets" resultType="int" parameterType="int">
+	select count(re_num) AS canceled
+	from RESERVATION
+	where cancel_f='Y' and TRUNC(re_date) = TRUNC(sysdate - #{ day })
+</select>
+
+<select id="selectJoinMember" resultType="int" parameterType="int">
+	select count(member_id) AS join
+	from MEMBER
+	where member_f='N' and TRUNC(input_date) = TRUNC(sysdate - #{ day })
+</select>
+
+<select id="selectWithdrawMember" resultType="int" parameterType="int">
+	select count(member_id) AS withdraw
+	from MEMBER
+	where member_f='Y' and TRUNC(input_date) = TRUNC(sysdate - #{ day })
+</select>
+
+<select id="selectAllMovie" resultType="dashMovieDomain">
+	select m.movie_num, title_k, subtitle, showtime, release_date, g_name, main_image, remove_f
+	from movie m, genre g
+	where m.movie_num = g.movie_num and remove_f = 'N' and screening_f=1
+	order by release_date desc
+</select>
+
+</mapper>

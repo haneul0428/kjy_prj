@@ -1,0 +1,464 @@
+@charset "UTF-8";
+
+.swiper-container {
+    margin-top: 10px;
+    width: 100%; /* 부모 컨테이너 크기에 맞추기 */
+    overflow: hidden; /* 슬라이드가 넘치는 부분을 숨김 */
+}
+
+.swiper-wrapper {
+    display: flex;
+    width: 100%;
+
+    /*overflow: hidden; !* 슬라이드가 wrapper를 벗어나지 않도록 *!*/
+}
+
+.movie-rank {
+    position: absolute; /* 제목을 슬라이드 안에서 자유롭게 배치 */
+    bottom: 245px; /* 슬라이드 하단에 배치 */
+    transform: translateX(-80%); /* 중앙 정렬 */
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff; /* 글자 색을 흰색으로 설정 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 글자에 그림자 효과 추가 */
+}
+
+.swiper-button-prev {
+    overflow: hidden;
+    left: -20px;
+    top: calc(50% - 26px);
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    font-size: 0;
+    border-radius: 50%;
+    box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.2)
+}
+
+.swiper-button-prev:after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8) url('/images/arrow2.png') center/9px 13px scroll no-repeat
+}
+
+.swiper-button-next {
+    overflow: hidden;
+    right: -20px;
+    top: calc(50% - 26px);
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    font-size: 0;
+    border-radius: 50%;
+    box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.2)
+}
+
+.swiper-button-next:after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8) url('/images/arrow2.png') center/9px 13px scroll no-repeat;
+    transform: rotate(-180deg)
+}
+
+.swiper-slide {
+    width: 150px; /* 한 번에 보여주는 슬라이드 수 (5개) */
+    height: 290px; /* 슬라이드 높이 고정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*background-color: #f4f4f4;*/
+    /*border: 1px solid #ccc;*/
+    border-radius: 10px;
+    position: relative; /* 제목을 슬라이드 안에 배치 */
+    padding-bottom: 20px; /* 슬라이드와 제목 사이에 간격을 추가 */
+    overflow: hidden;
+}
+
+.slide-content {
+    width: 100%;
+    height: 270px; /* 슬라이드 콘텐츠의 높이 설정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background-color: #e0e0e0;*/
+}
+
+.movie-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+.slide-image { /* 이미지가 슬라이드 높이를 넘지 않게 */
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 비율을 유지하면서 크기 조정 */
+}
+
+.chart-title {
+    color: #222222;
+    padding: 20px 10px;
+    font-size: 25px;
+    text-align: left;
+    font-weight: bold;
+    position: relative;
+}
+
+.event-swiper-container {
+    width: 100%; /* 전체 폭 */
+    max-width: 1200px; /* 최대 슬라이더 폭 */
+    height: 500px; /* 슬라이더 전체 높이 */
+    overflow: hidden; /* 넘치는 콘텐츠 숨김 */
+    margin: auto;
+}
+
+.event-slide-content {
+    width: 300px;
+    height: 200px; /* 슬라이더 크기 중 이미지가 차지할 비율 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.event-slide-image {
+    max-width: 300px; /* 이미지 폭에 맞춤 */
+    max-height: 500px; /* 이미지 높이에 맞춤 */
+    border-radius: 10px;
+    background-color: #222221;
+    object-fit: cover; /* 이미지 비율 맞추기 */
+}
+
+.event-title {
+    padding-top: 30px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #222222; /* 글자 색을 흰색으로 설정 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 글자에 그림자 효과 추가 */
+}
+
+.swiper-slide img {
+    transition: transform 0.3s ease; /* smooth zooming transition */
+    cursor: pointer; /* change cursor to indicate zoomable image */
+}
+
+
+/*
+movie_view
+*/
+
+
+.box {
+    border: 1px solid #bab8ae;
+    border-radius: 20px;
+    margin: 20px 20px 20px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+
+
+}
+
+.box-p {
+    font-size: 15px;
+    margin: 10px;
+}
+
+.box-text {
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.box-num {
+    font-weight: bold;
+    color: black;
+    font-size: 35px;
+    padding-left: 42%;
+    padding-top: 25%;
+}
+
+.active {
+    background-color: #fb4357;
+    color: #ffffff;
+}
+
+/*
+movie_list
+*/
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px;
+}
+
+.card {
+    flex: 0 0 calc(33.33% - 20px);
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+}
+
+.card-movie-info {
+    margin-top: 10px;
+}
+
+.card-movie-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.card-movie-release {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.card-movie-detail {
+    font-size: 14px;
+    padding: 5px 10px;
+    background-color: #fb4357;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.card-movie-detail:hover {
+    background-color: #222222;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    margin-top: 50px;
+    border-radius: 50%; /* 원형 이미지 */
+    object-fit: cover; /* 이미지가 고르게 채워지도록 설정 */
+}
+
+
+@media (max-width: 768px) {
+    .box {
+        width: 100%; /* 화면이 작아지면 부모 요소 크기 조정 */
+        height: auto; /* 높이도 자동 조정 */
+    }
+
+    .profile-image {
+        width: 80px; /* 이미지 크기 축소 */
+        height: 80px;
+    }
+}
+
+
+.ticket-box {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
+.ticket-header {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.ticket-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.sub {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.sub:hover {
+    background-color: #f8f8f8;
+}
+.click-img:hover{
+    cursor: pointer;
+}
+
+
+
+.details div {
+    margin-bottom: 5px;
+}
+
+.cancel-button button {
+    background-color: #fb4357;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+.cancel-button button:hover {
+    background-color: #f2f2f2;
+}
+
+.home{
+    font-size: 30px;
+    padding: 10px;
+
+}
+.home:hover{
+    background-color: #fb4357;
+    transition: background-color 0.3s ease, color 0.3s ease; /* 부드러운 전환 효과 */
+
+}
+.home a:hover{
+    color: #ffffff; /* 글자를 하얗게 */
+}
+
+
+.sub{
+    font-size: 20px;
+    padding: 10px;
+}
+.sub:hover{
+    background-color: #f8f8f8;
+}
+
+/**/
+.form {
+    max-width: 430px;
+    margin: 0 auto;
+}
+.form-group {
+    margin-bottom: 30px;
+    height: 40px;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*margin-bottom: 15px;*/
+}
+.form-group label {
+    width: 100px;
+    font-size: 18px;
+    text-align: right;
+    margin-right: 10px;
+}
+.form-group input {
+    flex: 1;
+    font-size: 14px;
+    padding: 5px;
+}
+input[type="button"] {
+    font-size: 14px;
+    margin-left: 10px;
+    padding: 5px 10px;
+}
+/* 수정하기 버튼 스타일 */
+.submit-button {
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 2px solid black;
+    cursor: pointer;
+}
+.submit-button:hover {
+    background-color: darkgray;
+}
+/* 리셋 버튼 스타일 */
+.reset-button {
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 2px solid black;
+    cursor: pointer;
+}
+.reset-button:hover {
+    background-color: lightgray;
+}
+
+/* 버튼 간격 조정 */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* 버튼 사이 간격 */
+}
+/* 프로필 이미지 미리보기 스타일 */
+.profile-group {
+    display: flex;
+    align-items: center;
+    gap: 50px; /* 미리보기와 파일 선택 간격 */
+}
+.profile-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-preview img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 버튼 컨테이너를 절대 위치로 설정하고 세로로 정렬 */
+.button-container {
+    position: absolute;
+    top: 50%; /* 수직 중앙 정렬 */
+    left: 50%; /* 수평 중앙 정렬 */
+    transform: translate(-50%, -50%); /* 중앙 정렬을 정확하게 하기 위한 방법 */
+    display: flex;
+    flex-direction: column; /* 세로로 정렬 */
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+
+/*메인페이지*/
+
+/* 버튼 스타일 */
+.detail-btn {
+    background-color: #333333;
+    color: white;
+    padding: 7px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.book-btn {
+    background-color: #fb4357;
+    color: white;
+    padding: 7px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+
+}
+
+/* 마우스를 올리면 버튼들이 보이도록 */
+.swiper-slide:hover .button-container {
+    opacity: 1;
+}

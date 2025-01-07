@@ -1,0 +1,13 @@
+@charset "UTF-8";
+#headerTitle{
+	font-size: 19px;
+	text-align: left;
+	padding: 10px;
+	padding-left: 20px;
+	background-color: #FFFFFF;
+	border: 1px solid #8C3434FF;
+}
+a{
+	text-decoration: none;
+	color: #8C3434FF;
+}

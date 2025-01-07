@@ -1,0 +1,100 @@
+@charset "utf-8";
+
+
+/* font-family:'Nanum Gothic', sans-serif; */
+a:hover {
+    font-size: 12px;
+    color: #a9a9a9;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none
+}
+
+caption, legend {
+    font-size: 0px;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+
+fieldset {
+    border: 0;
+    vertical-align: top;
+}
+
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 1px;
+
+}
+
+ul, ol, dl, li {
+    list-style: none;
+    margin: 0;
+}
+
+button {
+
+    cursor: pointer;
+}
+
+hr {
+    display: none;
+    clear: both;
+}
+
+
+
+.btnMy {
+    border: 1px solid #222222;
+    height: 41px;
+    background-color: #FFFFFF;
+    color: #222222;
+    cursor: pointer;
+    border-radius: 5px;
+
+}
+
+.btnSubmit {
+    border: 1px solid #fb4357;
+    height: 41px;
+    width: 180px;
+    background-color: #fb4357;
+    font-weight: bold;
+    color: #FFF;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+
+}
+.inputBox {
+    border: 1px solid #DEDEDE;
+    height: 37px;
+    border-radius: 5px;
+    padding-left: 10px; /* Optional, adds space between the input text and the left edge */
+}
+
+
+.btnMyReset{
+    border: 1px solid #87888A;
+    height: 41px;
+    width: 180px;
+    background-color: #87888A;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+
+}
+.required{
+    font-weight: bold;
+    color: red;
+}
+

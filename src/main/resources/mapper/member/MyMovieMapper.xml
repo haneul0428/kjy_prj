@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.cgv_prj.member.myCGV.AJAX.MyMovieMapper">
+
+    <select id="selectMyMovieCount" resultType="int" parameterType="String">
+        SELECT count(*) as view_count
+        FROM reservation
+        <![CDATA[WHERE view_date >= SYSDATE and member_id =#{member_id}]]>
+    </select>
+
+    <select id="selectAllMovieView" resultType="int" parameterType="String">
+        SELECT count(*) as view_all_count
+        FROM reservation
+        <![CDATA[WHERE view_date < SYSDATE and cancel_f = 'N' and member_id = #{member_id}]]>
+    </select>
+
+
+    <!--내가 본 영화 회수-->
+    <select id="selectMyMovie" resultType="int" parameterType="String">
+        SELECT count(*)
+        FROM reservation re
+        JOIN SCREENING_INFO si ON re.sc_num = si.sc_num
+        WHERE member_id = #{member_id}
+        AND cancel_f = 'N'
+        <![CDATA[AND sc_time < SYSDATE]]>
+    </select>
+
+    <!--내가 좋아요 한 영화-->
+    <select id="selectMovieList" resultType="int" parameterType="String">
+        select count(*)
+        from pre_egg
+        where member_id = #{member_id} and egg_f = 'G'
+    </select>
+
+    <!--내가 작성한 평점-->
+    <select id="selectMyReview" resultType="int" parameterType="String">
+        select count(*)
+        from review
+        join reservation on review.re_num = reservation.re_num
+        where member_id = #{member_id} and review_f in('G','B')
+    </select>
+
+
+</mapper>
+

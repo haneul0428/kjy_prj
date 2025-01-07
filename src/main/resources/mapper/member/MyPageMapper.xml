@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.cgv_prj.member.myCGV.MyPageMapper">
+
+    <resultMap id="reservationWithSeatsMap" type="kr.co.sist.kjy_prj.member.domain.ReservationDomain">
+        <!-- 예약 정보 -->
+        <id property="re_num" column="re_num" />
+        <result property="sc_num" column="sc_num" />
+        <result property="re_date" column="re_date" />
+        <result property="people" column="people" />
+        <result property="main_image" column="main_image"/>
+        <result property="sc_time" column="sc_time" />
+        <result property="movie_num" column="movie_num" />
+        <result property="title_k" column="title_k" />
+        <result property="price" column="price" />
+        <result property="amount" column="amount" />
+        <result property="th_name" column="th_name" />
+
+        <!-- 좌석 정보 (1:N 관계) -->
+        <collection property="re_seat" ofType="kr.co.sist.kjy_prj.member.domain.ReservationSeatDomain">
+            <result property="detail_s_num" column="detail_s_num" />
+            <result property="h_num" column="h_num" />
+            <result property="w_num" column="w_num" />
+        </collection>
+    </resultMap>
+
+    <!--예약 내역 검색-->
+    <select id="selectReservation" parameterType="String" resultMap="reservationWithSeatsMap">
+        SELECT
+        re.re_num AS re_num,
+        re.sc_num AS sc_num,
+        re.re_date AS re_date,
+        re.people AS people,
+        si.sc_time AS sc_time,
+        si.movie_num AS movie_num,
+        m.title_k AS title_k,
+        m.main_image AS main_image,
+        m.price AS price,
+        (m.price * re.people) AS amount,
+        th.th_name AS th_name,
+        rs.detail_s_num AS detail_s_num,
+        ds.h_num AS h_num,
+        ds.w_num AS w_num
+        FROM
+        reservation re
+        JOIN
+        screening_info si ON re.sc_num = si.sc_num
+        JOIN
+        movie m ON si.movie_num = m.movie_num
+        JOIN
+        theater th ON si.th_num = th.th_num
+        LEFT JOIN
+        re_seat rs ON re.re_num = rs.re_num
+        LEFT JOIN
+        detail_seat ds ON rs.detail_s_num = ds.detail_s_num
+        WHERE
+        re.cancel_f = 'N'
+        AND re.member_id = #{member_id}
+        ORDER BY
+        re.re_date DESC
+
+    </select>
+
+
+
+    <resultMap id="selectReOne" type="kr.co.sist.kjy_prj.member.domain.ReservationDomain">
+        <!-- 예약 정보 -->
+        <id property="re_num" column="re_num" />
+        <result property="sc_num" column="sc_num" />
+        <result property="re_date" column="re_date" />
+        <result property="people" column="people" />
+        <result property="main_image" column="main_image"/>
+        <result property="sc_time" column="sc_time" />
+        <result property="movie_num" column="movie_num" />
+        <result property="title_k" column="title_k" />
+        <result property="price" column="price" />
+        <result property="amount" column="amount" />
+        <result property="th_name" column="th_name" />
+
+        <!-- 좌석 정보 (1:N 관계) -->
+        <collection property="re_seat" ofType="kr.co.sist.kjy_prj.member.domain.ReservationSeatDomain">
+            <result property="detail_s_num" column="detail_s_num" />
+            <result property="h_num" column="h_num" />
+            <result property="w_num" column="w_num" />
+        </collection>
+    </resultMap>
+
+    <!--단 하나의 예약 정보만을 가져온다.-->
+    <select id="selectReservationOne" resultMap="selectReOne" parameterType="String">
+        SELECT *
+        FROM (
+        SELECT
+        re.re_num AS re_num,
+        re.sc_num AS sc_num,
+        re.re_date AS re_date,
+        re.people AS people,
+        si.sc_time AS sc_time,
+        si.movie_num AS movie_num,
+        m.title_k AS title_k,
+        m.main_image AS main_image,
+        m.price AS price,
+        (m.price * re.people) AS amount,
+        th.th_name AS th_name,
+        rs.detail_s_num AS detail_s_num,
+        ds.h_num AS h_num,
+        ds.w_num AS w_num,
+        ABS(si.sc_time - SYSDATE) AS time_diff -- 시간 차이 계산
+        FROM
+        reservation re
+        JOIN
+        screening_info si ON re.sc_num = si.sc_num
+        JOIN
+        movie m ON si.movie_num = m.movie_num
+        JOIN
+        theater th ON si.th_num = th.th_num
+        LEFT JOIN
+        re_seat rs ON re.re_num = rs.re_num
+        LEFT JOIN
+        detail_seat ds ON rs.detail_s_num = ds.detail_s_num
+        WHERE
+        re.cancel_f = 'N'
+        AND re.member_id = #{member_id}
+        AND TRUNC(si.sc_time) = TRUNC(SYSDATE) -- 오늘 날짜 조건
+        ORDER BY
+        time_diff ASC -- 가장 가까운 시간을 먼저
+        )
+        WHERE ROWNUM = 1 -- 가장 가까운 1개의 레코드만 선택
+    </select>
+
+
+
+    <!--내가 본 영화 매핑-->
+    <resultMap id="selectMyViewDomain" type="kr.co.sist.kjy_prj.member.domain.MyViewDomain">
+        <result property="title_k" column="title_k"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="sc_date" column="sc_date"/>
+        <result property="sc_time" column="sc_time"/>
+        <result property="review" column="review"/>
+        <result property="review_num" column="review_num"/>
+        <result property="review_f" column="review_f"/>
+        <result property="review_date" column="review_date"/>
+        <result property="main_image" column="main_image"/>
+        <result property="movie_num" column="movie_num"/>
+        <result property="view_date" column="view_date"/>
+        <result property="re_num" column="re_num"/>
+    </resultMap>
+
+    <!--내가 본 영화-->
+    <select id="selectMyView" resultMap="selectMyViewDomain"  parameterType="String">
+        SELECT
+        m.title_k,
+        m.subtitle,
+        si.sc_date,
+        si.sc_time,
+        re.re_num,
+        r.review,
+        r.review_num,
+        r.review_f,
+        r.review_date,
+        re.view_date,
+        m.main_image,
+        m.movie_num
+        FROM reservation re
+        JOIN SCREENING_INFO si ON re.sc_num = si.sc_num
+        JOIN movie m ON si.movie_num = m.movie_num
+        LEFT JOIN review r ON re.re_num = r.re_num
+        AND r.review_num = (
+        SELECT MAX(review_num)
+        FROM review
+        WHERE re_num = re.re_num
+        )
+        WHERE re.member_id = #{member_id}
+        AND re.cancel_f = 'N'
+        <![CDATA[AND sc_time < SYSDATE]]>
+    </select>
+
+
+    <resultMap id="selectReview" type="kr.co.sist.kjy_prj.member.domain.MyReviewDomain">
+        <result property="main_image" column="main_image"/>
+        <result property="review_date" column="review_date"/>
+        <result property="review" column="review"/>
+        <result property="review_f" column="review_f"/>
+        <result property="movie_num" column="movie_num"/>
+        <result property="re_num" column="re_num"/>
+        <result property="title_k" column="title_k"/>
+        <result property="review_num" column="review_num"/>
+
+    </resultMap>
+
+    <!--내가 쓴 평점-->
+    <select id="selectMyReview" resultMap="selectReview" parameterType="String">
+        select m.main_image, review_date, review, review_f, m.movie_num, re.re_num, m.title_k, review_num
+        from reservation re
+        join review r on re.re_num = r.re_num
+        join movie m on r.movie_num = m.movie_num
+        where member_id = #{member_id} and review_f in('G','B')
+    </select>
+
+
+
+    <resultMap id="selectMyListMovie" type="kr.co.sist.kjy_prj.member.domain.MyLikeMovieDomain">
+        <result column="title_k" property="title_k"/>
+        <result column="main_image" property="main_image"/>
+        <result column="movie_num" property="movie_num"/>
+        <result column="release_date" property="release_date"/>
+        <result column="egg_num" property="egg_num"/>
+    </resultMap>
+
+    <!--내가 좋아요를 누른 영화 리스트-->
+    <select id="selectMyLikeMovie" resultMap="selectMyListMovie" parameterType="String">
+        select m.main_image, pe.movie_num, m.release_date, pe.egg_num, m.title_k
+        from pre_egg pe
+        join movie m on pe.movie_num = m.movie_num
+        where pe.member_id = #{member_id}
+    </select>
+
+
+
+
+
+</mapper>
+

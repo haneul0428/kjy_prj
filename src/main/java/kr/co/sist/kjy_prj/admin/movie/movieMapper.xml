@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kjy_prj.admin.movie">
+
+	<!-- 총 게시물의 수 얻기 -->
+	<select id="totalCnt" resultType="int" parameterType="searchVO">
+		select count(movie_num) cnt from movie
+		<where>
+			<if test="keyword neq null and keyword neq ''">
+				<choose>
+					<when test="field eq 0">
+						instr(movie_num ,#{keyword}) != 0
+					</when>
+					<otherwise>
+						instr(title_k ,#{keyword}) != 0
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</select>
+
+	<select id="selectMovie" resultType="MovieDomain" parameterType="searchVO">
+		select movie_num, title_k, screening_f
+		from(select LPAD(movie_num,5,'0')movie_num, title_k, screening_f, remove_f, input_date,
+		row_number() over(order by movie_num desc) rnum
+		from movie
+		where remove_f = 'N'
+		<if test="keyword neq null and keyword neq ''">
+			<choose>
+				<when test="field eq 0">
+					and instr(movie_num, #{keyword}) != 0
+				</when>
+				<otherwise>
+					and instr(title_k, #{keyword}) != 0
+				</otherwise>
+			</choose>
+		</if>
+		)where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<insert id="insertMovie" parameterType="movieVO">
+		insert into 
+		movie(MOVIE_NUM,	TITLE_K,	TITLE_E,	SUBTITLE,	RELEASE_DATE,	PRICE,	
+		SHOWTIME,	INFO,	INPUT_DATE,	SCREENING_F,	REMOVE_F,	MAIN_IMAGE,	AUDIENCE_RATING,	RATE)
+		values((select nvl(max(movie_num), 0) + 1 from movie), #{ title_k }, #{ title_e }, #{ subtitle }, #{ release_date }, 
+		#{ price }, #{ showtime }, #{ info }, sysdate, '0', 'N', #{ main_image }, #{ audience_rating }, 0)
+	</insert>
+	
+	<insert id="insertGenre" parameterType="genreVO">
+		insert into
+		genre(MOVIE_NUM,	G_NAME)
+		values((select nvl(max(movie_num), 0) from movie), #{ g_name })
+	</insert>
+	
+	<insert id="insertCast" parameterType="castVO">
+		insert into
+		cast(MOVIE_NUM,	ACTOR,	IMAGE,	FILMOGRAPHY,	STAR_F)
+		values((select nvl(max(movie_num), 0) from movie), #{ actor }, #{ image }, #{ filmography }, #{ star_f })
+	</insert>
+	
+	<insert id="insertSupervision" parameterType="supervisionVO">
+		insert into
+		supervision(movie_num, s_name, image)
+		values((select nvl(max(movie_num), 0) from movie), #{ s_name }, #{ image })
+	</insert>
+	
+	<insert id="insertStillCut" parameterType="stillcutVO">
+		insert into
+		STILL_CUT(MOVIE_NUM,	STILL_CUT)
+		values((select nvl(max(movie_num), 0) from movie), #{ still_cut })
+	</insert>
+	
+	<insert id="insertCountry" parameterType="countryVO">
+		insert into
+		COUNTRY(MOVIE_NUM,	COUNTRY_NAME)
+		values((select nvl(max(movie_num), 0) from movie), #{ country_name })
+	</insert>
+	
+	<select id="selectDetailMovie" resultType="movieDomain"
+		parameterType="int">
+		select movie_num,	title_k,	title_e,	subtitle,	
+		release_date,	price,	showtime,	info,	screening_f,	main_image,	audience_rating	
+		from
+		movie
+		where movie_num=#{movie_num}
+	</select>
+	
+	<select id="selectDetailGenre" resultType="genreDomain"
+		parameterType="int">
+		select movie_num,	g_name
+		from
+		genre
+		where movie_num=#{movie_num}
+	</select>
+	
+	<select id="selectDetailCountry" resultType="countryDomain"
+		parameterType="int">
+		select movie_num,	country_name
+		from
+		country
+		where movie_num=#{movie_num}
+	</select>
+	
+	<select id="selectDetailSupervision" resultType="supervisionDomain"
+		parameterType="int">
+		select movie_num,	s_name,	image	
+		from
+		supervision
+		where movie_num=#{movie_num}
+	</select>
+	
+	<select id="selectDetailCast" resultType="castDomain"
+		parameterType="int">
+		select movie_num,	actor,	image,	filmography,	star_f	
+		from
+		cast
+		where movie_num=#{movie_num}
+	</select>
+	
+	<select id="selectDetailStillCut" resultType="stillCutDomain"
+		parameterType="int">
+		select movie_num,	still_cut	
+		from
+		still_cut
+		where movie_num=#{movie_num}
+	</select>
+	
+	<update id="deleteMovie" parameterType="movieVO">
+		update movie
+		set remove_flag='Y'
+		where
+		movie_num = #{ movie_num }
+	</update>
+	<!-- insert into
+		m_board(num,subject,content,writer,ip,pass)
+		values(
+		seq_board.nextval,#{subject},#{content},#{writer},#{ip},#{pass}) -->
+		
+	<select id="selectScreeningInfo" resultType="screeningInfoDomain"
+		parameterType="int">
+		select sc_num, th_num, sc_date,
+		to_char(sc_time, 'yyyy-mm-dd hh24:MI:ss') AS sc_time_str,
+		to_char(sc_end_time, 'yyyy-mm-dd hh24:MI:ss') AS sc_end_time_str
+		from
+		screening_info
+		where movie_num=#{movie_num}
+	</select>
+	
+	<select id="selectScNum" resultType="int">
+		select nvl(max(sc_num), 0) + 1 
+		from screening_info
+	</select>
+	
+	<insert id="insertMovieSchedule" parameterType="screeningInfoVO">
+		insert into
+		screening_info(sc_num,	th_num, movie_num, sc_date, sc_time, sc_end_time)
+		values((select nvl(max(sc_num), 0) + 1 from screening_info), 
+		1, #{ movie_num }, #{ sc_date }, 
+		(select to_date(#{ sc_time_str },'yyyy-mm-dd hh24:MI:ss') FROM DUAL), 
+		(select to_date(#{ sc_end_time_str },'yyyy-mm-dd hh24:MI:ss') FROM DUAL) )
+	</insert>
+	
+	<delete id="deleteMovieSchedule" parameterType="screeningInfoVO">
+		delete
+		from screening_info
+		where sc_num=#{ sc_num }
+	</delete>
+	
+	<update id="updateScreening" parameterType="int">
+		update movie
+		set screening_f='1'
+		where movie_num=#{movie_num}
+	</update>
+	
+	<update id="updateScreeningEnd" parameterType="int">
+		update movie
+		set screening_f='2'
+		where movie_num=#{movie_num}
+	</update>
+
+</mapper>
